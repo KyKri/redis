@@ -8,12 +8,27 @@ namespace redis
 {
     class Program
     {
+        
+        private static IConfigurationBuilder builder = new ConfigurationBuilder().AddJsonFile(Path.GetFullPath(Directory.GetCurrentDirectory()) + "/appsettings.json");
+        private static IConfiguration config = builder.Build();
+
+        private static string connectionString = config.GetConnectionString("redis");
         static void Main(string[] args)
         {
-            IConfigurationBuilder builder = new ConfigurationBuilder().AddJsonFile(Path.GetFullPath(Directory.GetCurrentDirectory()) + "/appsettings.json");
-            IConfiguration config = builder.Build();
+            
+        }
 
-            string connectionString = config.GetConnectionString("redis");
+        private static Lazy<ConnectionMultiplexer> lazyConnection = new Lazy<ConnectionMultiplexer>(() => 
+        {
+            return ConnectionMultiplexer.Connect(connectionString);
+        });
+
+        public static ConnectionMultiplexer Connection
+        {
+            get
+            {
+                return lazyConnection.Value;
+            }
         }
     }
 }
