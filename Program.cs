@@ -15,17 +15,18 @@ namespace redis
         private static string connectionString = config.GetConnectionString("redis");
         static void Main(string[] args)
         {
+            Console.WriteLine(connectionString);
             IDatabase cache = lazyConnection.Value.GetDatabase();
 
-            Console.WriteLine("Reading Cache: " + cache.StringGet("Session333").ToString());
-            Console.WriteLine("Writing Cache: " + cache.StringSet("Session333", "Writing something to Redis"));
-            Console.WriteLine("Reading Cache: " + cache.StringGet("Session333").ToString());
-            cache.KeyExpire("Session333", DateTime.Now.AddMinutes(1));
+            Console.WriteLine("Reading Cache: " + cache.StringGet("Session50").ToString());
+            Console.WriteLine("Writing Cache: " + cache.StringSet("Session50", "Writing something to Redis " + DateTime.Now));
+            Console.WriteLine("Reading Cache: " + cache.StringGet("Session50").ToString());
+            cache.KeyExpire("Session50", DateTime.Now.AddMinutes(1));
 
             lazyConnection.Value.Dispose();
 
-            Console.WriteLine();
-            Console.WriteLine();
+            Console.WriteLine("Press any key...");
+            Console.ReadLine();
         }
 
         private static Lazy<ConnectionMultiplexer> lazyConnection = new Lazy<ConnectionMultiplexer>(() => 
