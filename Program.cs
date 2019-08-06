@@ -15,7 +15,6 @@ namespace redis
         private static string connectionString = config.GetConnectionString("redis");
         static void Main(string[] args)
         {
-            Console.WriteLine(connectionString);
             IDatabase cache = lazyConnection.Value.GetDatabase();
 
             Console.WriteLine("Reading Cache: " + cache.StringGet("Session50").ToString());
